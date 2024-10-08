@@ -1,6 +1,6 @@
 ﻿namespace Task_1
 {
-    public class Mark
+    public class Mark : IMark
     {
         private int _number;
 

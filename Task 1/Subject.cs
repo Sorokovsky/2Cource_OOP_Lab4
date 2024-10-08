@@ -1,6 +1,6 @@
 ﻿namespace Task_1
 {
-    public class Subject
+    public class Subject : INamable
     {
         public string Name { get; set; } = string.Empty;
 

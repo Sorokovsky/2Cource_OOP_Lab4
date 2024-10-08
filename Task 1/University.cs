@@ -1,6 +1,6 @@
 ﻿namespace Task_1
 {
-    public class University
+    public class University : INamable, IGroupsable
     {
         public string Name { get; set; } = string.Empty;
         public LinkedList<Group> Groups { get; set; } = new();

@@ -1,10 +1,10 @@
 ﻿namespace Task_1
 {
-    public class Group
+    public class Group : INamable, IStudentsable, ISubjectsable
     {
         public string Name { get; set; } = string.Empty;
-        public readonly LinkedList<Student> Students;
-        public readonly LinkedList<Subject> Subjects;
+        public LinkedList<Student> Students {get; set;}
+        public LinkedList<Subject> Subjects {get; set;}
         public readonly LinkedList<Mark> Marks;
 
         public Group()

@@ -1,6 +1,6 @@
 ﻿namespace Task_1
 {
-    public class Student
+    public class Student : ISurnamable
     {
         public string Surname { get; set; } = string.Empty;
 
