@@ -2,11 +2,13 @@
 namespace Task_1;
 public static class Program
 {
+    private delegate void Operation();
     private static LinkedList<University> UNIVERSITIES = new();
     private static string FILE_PATH = "database.bin";
 
     public static void Main()
     {
+        Operation doing;
         while(true)
         {
             try
@@ -20,45 +22,17 @@ public static class Program
                         }
                     case 1:
                         {
-                            Console.Write("Введіть кількість університетів: "); int count = Convert.ToInt32(Console.ReadLine());
-                            if(count < 0) count = 0;
-                            UNIVERSITIES.Clear();
-                            for(int i = 0; i < count; i++)
-                            {
-                                Console.WriteLine($"Введення {i + 1} університету.");
-                                UNIVERSITIES.AddLast(University.Enter());
-                            }
-                            WriteToFile();
+                            doing = EnterAll;
                             break;
                         }
                     case 2:
                         {
-                            ReadFromFile();
-                            for(int i = 0; i < UNIVERSITIES.Count; i++)
-                            {
-                                Console.WriteLine($"#{i + 1}.");
-                                Console.WriteLine(UNIVERSITIES.ElementAt(i));
-                            }
+                           doing = ShowAll;
                             break;
                         }
                     case 3:
                         {
-                            ReadFromFile();
-                            foreach(var univer in UNIVERSITIES)
-                            {
-                                foreach(var group in univer.Groups)
-                                {
-                                    foreach (var student in group.Students)
-                                    {
-                                        var studentMarks = group.Marks.Where(mark => mark.Student.Surname.Equals(student.Surname));
-                                        double avarage = studentMarks.Sum(x => x.Number) / studentMarks.Count();
-                                        if (avarage == 4.5)
-                                        {
-                                            Console.WriteLine($"Студент: {student.Surname}, Група: {group.Name}, Університет: {univer.Name}");
-                                        }
-                                    }
-                                }
-                            }
+                            doing = Finding;   
                             break;
                         }
                     default:
@@ -66,12 +40,57 @@ public static class Program
                             throw new ArgumentException("Не відома операція. Спробуйте ще раз.");
                         }
                 }
+                doing.Invoke();
             } 
             catch(Exception exception)
             {
                 Console.WriteLine(exception.Message);
                 continue;
             }
+        }
+    }
+
+    private static void Finding()
+    {
+        ReadFromFile();
+        foreach(var univer in UNIVERSITIES)
+        {
+            foreach(var group in univer.Groups)
+            {
+                foreach (var student in group.Students)
+                {
+                    var studentMarks = group.Marks.Where(mark => mark.Student.Surname.Equals(student.Surname));
+                    double avarage = studentMarks.Sum(x => x.Number) / studentMarks.Count();
+                    if (avarage == 4.5)
+                    {
+                        Console.WriteLine($"Студент: {student.Surname}, Група: {group.Name}, Університет: {univer.Name}");
+                    }
+                }
+            }
+        }
+    }
+
+    public static void EnterAll()
+    {
+        Console.Write("Введіть кількість університетів: "); 
+        int count = Convert.ToInt32(Console.ReadLine());
+        if(count < 0) count = 0;
+        UNIVERSITIES.Clear();
+        for(int i = 0; i < count; i++)
+        {
+            Console.WriteLine($"Введення {i + 1} університету.");
+            UNIVERSITIES.AddLast(University.Enter());
+        }
+        WriteToFile();
+    }
+
+    private static void ShowAll()
+    {
+         ReadFromFile();
+        for(int i = 0; i < UNIVERSITIES.Count; i++)
+        {
+            Console.WriteLine($"#{i + 1}.");
+            Console.WriteLine(UNIVERSITIES.ElementAt(i));
         }
     }
 
